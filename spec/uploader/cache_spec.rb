@@ -112,6 +112,13 @@ describe CarrierWave::Uploader do
       @uploader.should have_permissions(0777)
     end
 
+    it "should set directory permissions if options are given" do
+      @uploader_class.directory_permissions = 0777
+
+      @uploader.cache!(File.open(file_path('test.jpg')))
+      @uploader.should have_directory_permissions(0777)
+    end
+
     describe "with ensuring multipart form deactivated" do
 
       before do
