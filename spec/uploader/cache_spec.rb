@@ -148,7 +148,8 @@ describe CarrierWave::Uploader do
         CarrierWave.stub!(:generate_cache_id).and_return('20071201-1234-345-2255')
 
         @cached_path = public_path('uploads/tmp/20071201-1234-345-2255/test_move.jpeg')
-        @uploader_class.permissions = 777
+        @uploader_class.permissions = 0777
+        @uploader_class.directory_permissions = 0777
       end
 
       after do
@@ -169,7 +170,7 @@ describe CarrierWave::Uploader do
         end
 
         it "should use move_to() during cache!()" do
-          CarrierWave::SanitizedFile.any_instance.should_receive(:move_to).with(@cached_path, 777)
+          CarrierWave::SanitizedFile.any_instance.should_receive(:move_to).with(@cached_path, 0777, 0777)
           CarrierWave::SanitizedFile.any_instance.should_not_receive(:copy_to)
           @uploader.cache!(@tmpfile)
         end
@@ -189,7 +190,7 @@ describe CarrierWave::Uploader do
         end
 
         it "should use copy_to() during cache!()" do
-          CarrierWave::SanitizedFile.any_instance.should_receive(:copy_to).with(@cached_path, 777)
+          CarrierWave::SanitizedFile.any_instance.should_receive(:copy_to).with(@cached_path, 0777, 0777)
           CarrierWave::SanitizedFile.any_instance.should_not_receive(:move_to)
           @uploader.cache!(@tmpfile)
         end
